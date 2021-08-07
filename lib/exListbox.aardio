@@ -1,0 +1,92 @@
+import fonts.fontAwesome;
+class exListbox{
+	ctor( winform , MenuList , itemHeight,bgcolor=0xa0a0a0,headColor=0x302D29,subColor=0x3F3C38,textColor=0xD1D1D1 ){
+		
+		winform.bgcolor = bgcolor;
+		
+		winform.onMeasureItem = function(measureItem){
+    		measureItem.itemHeight = itemHeight;  
+		}
+		
+		winform.onDrawItem = function(drawItem){
+     		..gdi.selectBrush(
+        		function(hdc,pen,brush){
+            		var rc = drawItem.rcItem;
+
+            		if (drawItem.itemID > 0) {  
+                		..gdi.drawLine(hdc,rc.left, rc.top,rc.right, rc.top); 
+            		} 
+  		
+            		if (drawItem.itemState & 1/*_ODS_SELECTED*/) {  
+                		..gdi.fillRect(hdc,0x83B314,rc);
+            		}
+		
+           		//加文字测试
+            		var alltext = winform.getItemText(drawItem.itemID + 1);
+            		var textTab = ..string.split(alltext,"<|>");
+            		var text = textTab[2];
+            		var font = ::LOGFONT(weight=400;color=textColor);
+            		
+            		var indexAll = textTab[1];
+            		var head = ..string.split(indexAll,"<.>");
+            		if(head[[2]]!=null){
+            			..gdi.fillRect(hdc,subColor,rc);
+            			..gdi.textOut(hdc,font,text,rc.left+60, rc.top+10);
+            			var subico = ..string.unescape(textTab[3]);
+            			var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
+            			..gdi.textOut(hdc,font,subico,rc.left+30, rc.top+10);
+            		}else {
+            			..gdi.fillRect(hdc,headColor,rc);
+							
+						..gdi.textOut(hdc,font,text,rc.left+40, rc.top+10);
+						var subico = ..string.unescape(textTab[3]);
+            			var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
+            			..gdi.textOut(hdc,font,subico,rc.left+10, rc.top+10);
+						
+						
+						var ICO = '\uF0D7';
+						var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
+						var index = tonumber(head[1]);
+						if (MenuList[index].展开==true) {
+							ICO = '\uF0D8';
+						}
+						..gdi.textOut(hdc,font,ICO,rc.right-30, rc.top+10);
+            		}
+		
+         		},drawItem.hDC,0xa0a0a0/*背景色*/,0xa0a0a0/*画笔色*/)
+		}
+		
+		for(k,v in MenuList){
+			winform.add(v[1]);
+		}
+		
+		winform.oncommand = function(id,event){
+    		var selindex = winform.selIndex;
+			if(selindex){
+				var name = winform.getItemText(selindex);
+				var textTab = ..string.split(name,"<|>");
+        		var indexAll = textTab[1];
+        		var head = ..string.split(indexAll,"<.>");
+        		var index = tonumber(head[1]);
+        		var subindex = tonumber(head[2]);
+        		var count = #MenuList[index]-1;
+				if(head[[2]]==null){
+					if( MenuList[index].展开 ){
+						for(j=count;1;-1){
+							winform.delete(selindex+j);
+						}
+						MenuList[index].展开 = false;
+					}else {
+						for(j=1;count;1){
+							winform.add(MenuList[index][1+j],selindex+j);
+						}
+						MenuList[index].展开 = true;
+					}	
+				}else {
+			 		if(this.onClick) this.onClick(index,subindex,textTab[2]);
+				}
+			}
+		}
+	};
+}
+
