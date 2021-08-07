@@ -1,0 +1,48 @@
+import win.ui;
+/*DSG{{*/
+mainForm = win.form(text="aardio工程15";right=959;bottom=591)
+mainForm.add(
+listbox={cls="listbox";left=0;top=0;right=163;bottom=592;items={};ownerDraw=1;z=1}
+)
+/*}}*/
+
+import console
+console.open()
+
+var MenuList = {
+	{
+		"1|应用管理|\uF013";
+		"1.1|应用_demo1|\uF014";
+		"1.2|应用_demo2|\uF015";
+		"1.3|应用_demo3|\uF016";
+		"1.4|应用_demo4|\uF017";
+		展开 = false;
+	},
+	{
+		"2|协议管理|\uF0E8";
+		"2.1|协议_demo1|\uF0E9";
+		"2.2|协议_demo2|\uF0EA";
+		"2.3|协议_demo3|\uF0EB";
+		展开 = false;
+	},
+	{
+		"3|日志管理|\uF039";
+		"3.1|日志_demo1|\uF040";
+		"3.2|日志_demo2|\uF041";
+		"3.3|日志_demo3|\uF042";
+		"3.4|日志_demo4|\uF043";
+		展开 = false;
+	}
+};
+
+import exListbox;
+var exx = exListbox(mainForm.listbox,MenuList,30,0x000000,0x272E2D,0x663202,0xFFD859);
+
+exx.onClick = function(index,subindex,text){
+	console.log(index,subindex,text)
+}
+
+
+
+mainForm.show();
+return win.loopMessage();
