@@ -1,7 +1,6 @@
 import fonts.fontAwesome;
 class exListbox{
-	ctor( winform , MenuList , itemHeight,bgcolor=0xa0a0a0,headColor=0x302D29,subColor=0x3F3C38,textColor=0xD1D1D1 ){
-		
+	ctor( winform , MenuList , itemHeight,bgcolor=0xa0a0a0,headColor=0x302D29,subColor=0x3F3C38,textColor=0xD1D1D1,selColor=0x6E6B67 ){
 		winform.bgcolor = bgcolor;
 		
 		winform.onMeasureItem = function(measureItem){
@@ -13,15 +12,6 @@ class exListbox{
         		function(hdc,pen,brush){
             		var rc = drawItem.rcItem;
 
-            		if (drawItem.itemID > 0) {  
-                		..gdi.drawLine(hdc,rc.left, rc.top,rc.right, rc.top); 
-            		} 
-  		
-            		if (drawItem.itemState & 1/*_ODS_SELECTED*/) {  
-                		..gdi.fillRect(hdc,0x83B314,rc);
-            		}
-		
-           		//加文字测试
             		var alltext = winform.getItemText(drawItem.itemID + 1);
             		var textTab = ..string.split(alltext,"<|>");
             		var text = textTab[2];
@@ -30,19 +20,25 @@ class exListbox{
             		var indexAll = textTab[1];
             		var head = ..string.split(indexAll,"<.>");
             		if(head[[2]]!=null){
-            			..gdi.fillRect(hdc,subColor,rc);
+            			if (drawItem.itemState & 1/*_ODS_SELECTED*/) {  
+                			..gdi.fillRect(hdc,selColor,rc);
+            			}else {
+                			..gdi.fillRect(hdc,subColor,rc);
+            			}
+            		}else {
+            			..gdi.fillRect(hdc,headColor,rc);
+            		}
+            		
+            		if(head[[2]]!=null){
             			..gdi.textOut(hdc,font,text,rc.left+60, rc.top+10);
             			var subico = ..string.unescape(textTab[3]);
             			var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
             			..gdi.textOut(hdc,font,subico,rc.left+30, rc.top+10);
             		}else {
-            			..gdi.fillRect(hdc,headColor,rc);
-							
 						..gdi.textOut(hdc,font,text,rc.left+40, rc.top+10);
 						var subico = ..string.unescape(textTab[3]);
             			var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
             			..gdi.textOut(hdc,font,subico,rc.left+10, rc.top+10);
-						
 						
 						var ICO = '\uF0D7';
 						var font = ::LOGFONT(color=textColor;h=-18;name='FontAwesome'); 
@@ -52,14 +48,26 @@ class exListbox{
 						}
 						..gdi.textOut(hdc,font,ICO,rc.right-30, rc.top+10);
             		}
-		
+            		
+					if (drawItem.itemState & 1/*_ODS_SELECTED*/) {
+						//去掉焦点框  
+                		::DrawFocusRect(hdc,rc);
+            		}
+            		
          		},drawItem.hDC,0xa0a0a0/*背景色*/,0xa0a0a0/*画笔色*/)
 		}
 		
 		for(k,v in MenuList){
-			winform.add(v[1]);
+			if(v.展开){
+				for(j=1;#v;1){
+					winform.add(v[j]);
+				}
+			}else {
+				winform.add(v[1]);
+			}
+			
 		}
-		
+
 		winform.oncommand = function(id,event){
     		var selindex = winform.selIndex;
 			if(selindex){
