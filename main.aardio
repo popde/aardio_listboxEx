@@ -16,7 +16,7 @@ var MenuList = {
 		"1.2|应用_demo2|\uF015";
 		"1.3|应用_demo3|\uF016";
 		"1.4|应用_demo4|\uF017";
-		展开 = false;
+		展开 = true;
 	},
 	{
 		"2|协议管理|\uF0E8";
@@ -36,7 +36,7 @@ var MenuList = {
 };
 
 import exListbox;
-var exx = exListbox(mainForm.listbox,MenuList,30,0x000000,0x272E2D,0x663202,0xFFD859);
+var exx = exListbox(mainForm.listbox,MenuList,30,0x000000,0x272E2D,0x663202,0xFFD859,0x3B94FF);
 
 exx.onClick = function(index,subindex,text){
 	console.log(index,subindex,text)
