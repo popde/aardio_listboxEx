@@ -48,11 +48,12 @@ class exListbox{
 						}
 						..gdi.textOut(hdc,font,ICO,rc.right-30, rc.top+10);
             		}
-            		
-					if (drawItem.itemState & 1/*_ODS_SELECTED*/) {
+
+					if (drawItem.itemState & 0x10/*_ODS_FOCUS*/) {
 						//去掉焦点框  
                 		::DrawFocusRect(hdc,rc);
             		}
+
             		
          		},drawItem.hDC,0xa0a0a0/*背景色*/,0xa0a0a0/*画笔色*/)
 		}
@@ -68,7 +69,7 @@ class exListbox{
 			
 		}
 
-		winform.oncommand = function(id,event){
+		winform.onSelChange = function(){
     		var selindex = winform.selIndex;
 			if(selindex){
 				var name = winform.getItemText(selindex);
@@ -97,4 +98,5 @@ class exListbox{
 		}
 	};
 }
+
 
